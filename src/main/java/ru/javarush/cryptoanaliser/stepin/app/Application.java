@@ -15,7 +15,6 @@ public class Application {
     public Result run(String[] args) {
         String command = args[0];
         String[] parameters = Arrays.copyOfRange(args, 1, args.length);
-        Result result = mainController.execute(command,parameters);
-        return result;
+        return mainController.execute(command,parameters);
     }
 }
