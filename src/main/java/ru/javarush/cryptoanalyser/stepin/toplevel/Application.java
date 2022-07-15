@@ -1,7 +1,7 @@
-package ru.javarush.cryptoanaliser.stepin.app;
+package ru.javarush.cryptoanalyser.stepin.toplevel;
 
-import ru.javarush.cryptoanaliser.stepin.Result;
-import ru.javarush.cryptoanaliser.stepin.controller.MainController;
+import ru.javarush.cryptoanalyser.stepin.entity.Result;
+import ru.javarush.cryptoanalyser.stepin.controller.MainController;
 
 import java.util.Arrays;
 

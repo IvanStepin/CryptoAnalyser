@@ -1,7 +1,8 @@
-package ru.javarush.cryptoanaliser.stepin;
+package ru.javarush.cryptoanalyser.stepin;
 
-import ru.javarush.cryptoanaliser.stepin.app.Application;
-import ru.javarush.cryptoanaliser.stepin.controller.MainController;
+import ru.javarush.cryptoanalyser.stepin.toplevel.Application;
+import ru.javarush.cryptoanalyser.stepin.controller.MainController;
+import ru.javarush.cryptoanalyser.stepin.entity.Result;
 
 public class Runner {
     public static void main(String[] args) {
