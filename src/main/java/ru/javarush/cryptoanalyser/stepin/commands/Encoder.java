@@ -1,34 +1,47 @@
 package ru.javarush.cryptoanalyser.stepin.commands;
 
-import ru.javarush.cryptoanalyser.stepin.entity.Result;
-import ru.javarush.cryptoanalyser.stepin.entity.ResultCodeEnum;
-import ru.javarush.cryptoanalyser.stepin.exceptions.ApplicationException;
-import ru.javarush.cryptoanalyser.stepin.util.PathFinder;
-
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
+import java.nio.file.Paths;
+import java.util.Scanner;
 
 import static ru.javarush.cryptoanalyser.stepin.constants.Strings.ALPHABET;
 
-public class Encoder implements Action{
-    @Override
-    public Result execute(String[] parameters) {
-        String encryptedFile = parameters[1];
-        int key = Integer.parseInt(parameters[2]);
-        
-        Path path = Path.of(PathFinder.getRoot()+encryptedFile);
-        try {
-            String string = Files.readString(path);
-            encrypt(string, key);
-        } catch (IOException e) {
-            throw new ApplicationException("IO error", e);
-        }
-        return new Result(ResultCodeEnum.OK, "read all bytes" + path);
-    }
-    String encrypt(String message, int key) {
+public class Encoder implements Action {
+    private static final Scanner scanner;
 
+    static {
+        scanner = new Scanner(System.in);
+    }
+
+    @Override
+    public void execute() throws IOException {
+
+        System.out.println("Введите полный путь к файлу, для его зашифровки:");
+        String pathNotEncryptedFile = scanner.nextLine();
+
+        System.out.println("Введите ключ шифрования:");
+        int key = Integer.parseInt(scanner.nextLine());
+
+        System.out.println("Введите полный путь к файлу, в который записать зашифрованый текст:");
+        String pathEncryptedFile = scanner.nextLine();
+
+        try (var reader = Files.newBufferedReader(Paths.get(pathNotEncryptedFile));
+             var writer = Files.newBufferedWriter(Paths.get(pathEncryptedFile))
+        ) {
+            while (reader.ready()) {
+                String string = reader.readLine();
+                String encryptString = encrypt(string, key);
+                writer.write(encryptString + System.lineSeparator());
+            }
+            System.out.println("Содержимое файла зашифровано.");
+
+        } catch (IOException e) {
+            throw new IOException("Путь некорректен");
+        }
+    }
+
+    String encrypt(String message, int key) {
         StringBuilder result = new StringBuilder();
 
         for (char aChar : message.toCharArray()) {
@@ -40,10 +53,10 @@ public class Encoder implements Action{
 
             if (origAlphabetPos >= 0) {
                 if (key >= 0) {
-                    newAlphabetPos = (origAlphabetPos + key) % (ALPHABET.length());
+                    newAlphabetPos = (origAlphabetPos + key) % ALPHABET.length();
                 } else {
-                    int newKey = key % (ALPHABET.length());
-                    newAlphabetPos = (origAlphabetPos + (ALPHABET.length()) + newKey) % ALPHABET.length();
+                    int newKey = key % ALPHABET.length();
+                    newAlphabetPos = (origAlphabetPos + ALPHABET.length() + newKey) % ALPHABET.length();
                 }
                 newCharacter = ALPHABET.charAt(newAlphabetPos);
             }

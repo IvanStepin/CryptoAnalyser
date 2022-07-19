@@ -1,7 +1,6 @@
 package ru.javarush.cryptoanalyser.stepin.commands;
 
-import ru.javarush.cryptoanalyser.stepin.entity.Result;
-
+import java.io.IOException;
 public interface Action {
-    Result execute(String [] parameters);
+    void execute() throws IOException;
 }

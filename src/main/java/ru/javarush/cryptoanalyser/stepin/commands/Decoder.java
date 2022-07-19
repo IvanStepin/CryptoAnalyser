@@ -1,32 +1,46 @@
 package ru.javarush.cryptoanalyser.stepin.commands;
 
-import ru.javarush.cryptoanalyser.stepin.entity.Result;
-import ru.javarush.cryptoanalyser.stepin.entity.ResultCodeEnum;
-import ru.javarush.cryptoanalyser.stepin.exceptions.ApplicationException;
-import ru.javarush.cryptoanalyser.stepin.util.PathFinder;
-
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Scanner;
 
 public class Decoder implements Action {
-    @Override
-    public Result execute(String[] parameters) {
-        String decriptedFile = parameters[1];
-        int key = Integer.parseInt(parameters[2]);
+    private static final Encoder encoder;
+    private static final Scanner scanner;
 
-        Path path = Path.of(PathFinder.getRoot() + decriptedFile);
-        try {
-            String string = Files.readString(path);
-            deEncrypt(string, key);
+    static {
+        encoder = new Encoder();
+        scanner = new Scanner(System.in);
+    }
+    @Override
+    public void execute() throws IOException {
+
+        System.out.println("Введите полный путь к файлу, для его расшифровки:");
+        String pathNotEncryptedFile = scanner.nextLine();
+
+        System.out.println("Введите ключ шифрования:");
+        int key = Integer.parseInt(scanner.nextLine());
+
+        System.out.println("Введите полный путь к файлу, в который записать расшифрованный текст:");
+        String pathEncryptedFile = scanner.nextLine();
+
+        try (var reader = Files.newBufferedReader(Paths.get(pathNotEncryptedFile));
+             var writer = Files.newBufferedWriter(Paths.get(pathEncryptedFile))
+        ) {
+            while (reader.ready()) {
+                String string = reader.readLine();
+                String encryptString = deEncrypt(string, key);
+                writer.write(encryptString + System.lineSeparator());
+            }
+            System.out.println("Содержимое файла расшифровано.");
+
         } catch (IOException e) {
-            throw new ApplicationException("IO error", e);
+            throw new IOException("Путь некорректен");
         }
-        return new Result(ResultCodeEnum.OK, "read all bytes" + path);
     }
 
     public String deEncrypt(String message, int key) {
-        Encoder encoder = new Encoder();
         return encoder.encrypt(message, key * (-1));
     }
 }
