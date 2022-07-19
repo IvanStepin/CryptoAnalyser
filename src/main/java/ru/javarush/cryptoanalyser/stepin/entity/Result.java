@@ -2,15 +2,15 @@ package ru.javarush.cryptoanalyser.stepin.entity;
 
 public class Result {
 
-    private final ResultCode resultCode;
+    private final ResultCodeEnum resultCode;
     private final String message;
 
-    public Result(ResultCode resultCode, String message) {
+    public Result(ResultCodeEnum resultCode, String message) {
         this.resultCode = resultCode;
         this.message = message;
     }
 
-    public ResultCode getResultCode() {
+    public ResultCodeEnum getResultCode() {
         return resultCode;
     }
 

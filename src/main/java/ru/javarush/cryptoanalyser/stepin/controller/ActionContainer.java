@@ -4,17 +4,17 @@ import ru.javarush.cryptoanalyser.stepin.commands.Action;
 import ru.javarush.cryptoanalyser.stepin.commands.Decoder;
 import ru.javarush.cryptoanalyser.stepin.commands.Encoder;
 
-public enum Actions {
+public enum ActionContainer {
     ENCODE(new Encoder()),
     DECODE(new Decoder());
 
     private final Action action;
 
-    Actions(Action action) {
+    ActionContainer(Action action) {
         this.action = action;
     }
 
     public static Action find(String command) {
-        return Actions.valueOf(command.toUpperCase()).action;
+        return ActionContainer.valueOf(command.toUpperCase()).action;
     }
 }

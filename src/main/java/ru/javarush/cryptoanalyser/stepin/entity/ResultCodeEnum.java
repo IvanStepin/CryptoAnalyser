@@ -1,6 +1,6 @@
 package ru.javarush.cryptoanalyser.stepin.entity;
 
-public enum ResultCode {
+public enum ResultCodeEnum {
     OK,
     ERROR
 }
